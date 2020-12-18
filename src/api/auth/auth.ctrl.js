@@ -1,15 +1,6 @@
 import Joi from 'joi';
 import Admin from '../../model/admin';
 
-/*
-  // POST /api/auth/register
-  {
-    name: '김소현',
-    email: 'sooooooohyeon5@naver.com'
-    password: '123456'
-  }
-*/
-
 export const register = async ctx => {
   const schema = Joi.object.keys({
     name: Joi.string().min(2).required(),
@@ -20,7 +11,7 @@ export const register = async ctx => {
   const result = schema.validate(ctx.request.body);
 
   if (result.error) {
-    ctx.status = 400; // Bad request
+    ctx.status = 400;
     ctx.body = result.error;
     return;
   }
@@ -31,7 +22,7 @@ export const register = async ctx => {
     const emailExist = await Admin.findOne({ email });
 
     if (emailExist) {
-      ctx.status = 409; // Conflict
+      ctx.status = 409;
       return;
     }
     const admin = new Admin({
@@ -48,9 +39,6 @@ export const register = async ctx => {
     ctx.throw(500, e);
   }
 };
-
-// 로그인
-// POST /api/auth/login
 
 export const login = async ctx => {    
   const schema = Joi.object().keys({

@@ -7,7 +7,6 @@ const AdminSchema = new Schema({
   hashedPassword: { type: String, required: true },
 });
 
-// Add methods
 AdminSchema.methods.setPassword = async function (password) {
   const hash = await bcrypt.hash(password, 10);
   this.hashedPassword = hash;
@@ -15,7 +14,7 @@ AdminSchema.methods.setPassword = async function (password) {
 
 AdminSchema.methods.checkPassword = async function (password) {
   const result = await bcrypt.compare(password, this.pw);
-  return result; // true / false
+  return result;
 };
 
 AdminSchema.methods.serialize = function () {
@@ -25,5 +24,4 @@ AdminSchema.methods.serialize = function () {
 };
 
 const Admin = model('Admin', AdminSchema);
-
 export default Admin;
