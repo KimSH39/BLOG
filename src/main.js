@@ -34,10 +34,6 @@ const router = new Router();
 router.use('/api', api.routes());
 app.use(router.routes()).use(router.allowedMethods());
 
-app.use(ctx => {
-    ctx.body = 'hellp koa';
-});
-
 const port = PORT || 4000;
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);
