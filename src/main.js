@@ -6,11 +6,15 @@ dotenv.config();
 
 const { PORT, MONGO_URI } = process.env;
 
+if (!MONGO_URI) {
+    throw Error('mongodb uri가 존재하지 않습니다.');
+}
+
 async function connectDB(){
     try{
         await mongoose.connect(MONGO_URI,{
             useNewUrlParser: true,
-            useFindAndModify: true,
+            useFindAndModify: false,
             useUnifiedTopology: true.
         });
         console.log("Connected to MongoDB");

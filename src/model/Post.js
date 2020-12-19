@@ -9,7 +9,7 @@ const PostSchema = new Schema(
       publishedDate: {
         type: Date,
         default: Date.now,
-      }, //글 작성일    
+      },   
     },
     {
       timestamps: {
