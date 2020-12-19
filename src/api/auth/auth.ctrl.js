@@ -20,7 +20,7 @@ export const register = async ctx => {
   const { name, email, password } = ctx.request.body;
 
   try { 
-    const emailExist = await Admin.findOne({ email });
+    const emailExist = await Admin.findOne(email);
 
     if (emailExist) {
       ctx.status = 409;
@@ -58,7 +58,7 @@ export const login = async ctx => {
   const { email, password } = ctx.request.body;
 
   try {
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne(email);
     const valid = await Admin.checkPassword(password);
 
     if (!admin || !valid) {
@@ -70,6 +70,11 @@ export const login = async ctx => {
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+
+export const check = async ctx => {
+
+  
 };
 
 export const logout = async ctx => {
