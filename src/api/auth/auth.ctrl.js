@@ -1,10 +1,11 @@
 import Joi from 'joi';
+import jwt from 'jsonwebtoken';
 import Admin from '../../model/admin';
 
 export const register = async (ctx) => {
-  const schema = Joi.object.keys({
+  const schema = Joi.object().keys({
     name: Joi.string().min(2).max(10).required(),
-    email: Joi.string.email().required(),
+    email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
   });
 
@@ -38,12 +39,11 @@ export const register = async (ctx) => {
   }
 };
 
-/*export const login = async (ctx) => {
+export const login = async (ctx) => {
   const schema = Joi.object().keys({
-    email: Joi.string.email().required(),
+    email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
   });
-
   const result = schema.validate(ctx.request.body);
 
   if (result.error) {
@@ -55,19 +55,31 @@ export const register = async (ctx) => {
   const { email, password } = ctx.request.body;
 
   try {
-    const admin = await Admin.findOne(email);
-    const valid = await Admin.checkPassword(password);
-
-    if (!admin || !valid) {
+    const admin = await Admin.findOne({
+      email,
+    });
+    if (!admin) {
       ctx.status = 401;
+      ctx.body = 'Wrong Email';
       return;
     }
 
-    ctx.body = admin.serialize();
+    const result = await admin.checkPassword(password);
+    if (!result) {
+      ctx.status = 401;
+      ctx.body = 'Wrong Password';
+      return;
+    }
+
+    console.log(admin);
+    const token = jwt.sign({ id: Admin._id }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+    ctx.body = token;
   } catch (e) {
-    ctx.throw(500, e);
+    console.error(e);
   }
-};*/
+};
 
 export const check = async (ctx) => {
   const { user } = ctx.state;

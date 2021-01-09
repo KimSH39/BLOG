@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 import Router from 'koa-router';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -32,6 +33,7 @@ const app = new Koa();
 const router = new Router();
 
 router.use('/api', api.routes());
+app.use(bodyParser());
 app.use(router.routes()).use(router.allowedMethods());
 
 const port = PORT || 4000;
